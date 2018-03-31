@@ -1,0 +1,70 @@
+215. Kth Largest Element in an Array
+
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+For example,
+Given [3,2,1,5,6,4] and k = 2, return 5.
+
+Note: 
+You may assume k is always valid, 1 ≤ k ≤ array's length.
+
+Credits:
+Special thanks to @mithmatt for adding this problem and creating all test cases.
+
+使用大小为k的小顶堆，根节点就是第k大的元素
+当小顶堆未满时，将元素放到末尾，使用上浮维护小顶堆
+当小顶堆已满时，比较根元素和插入元素，插入元素大于根元素时，将根元素变为插入元素并使用下沉维护小顶堆。
+
+solution：
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+		int[] heap = new int[k];
+
+		heap[0] = nums[0];
+		for (int i = 0; i < k; i++) {
+			up(heap, nums[i], i);
+		}
+		for (int i = k; i < nums.length; i++) {
+			down(heap, nums[i], k);
+		}
+
+		return heap[0];
+	}
+
+	public static void down(int[] heap, int num, int k) {
+		if (heap[0] < num) {
+			heap[0] = num;
+			int i = 0;
+			while (i < k) {
+				int child = 2 * i + 1;
+				if (child + 1 < k && heap[child] > heap[child + 1]) {
+					child++;
+				}
+				if (child < k && heap[child] < heap[i]) {
+					swap(heap, i, child);
+					i = child;
+				} else {
+					break;
+				}
+			}
+		}
+	}
+
+	public static void up(int[] heap, int num, int i) {
+		heap[i] = num;
+		while (i != 0) {
+			int parent = (i - 1) / 2;
+			if (heap[i] < heap[parent]) {
+				swap(heap, i, parent);
+				i = parent;
+			} else {
+				break;
+			}
+		}
+	}
+
+	private static void swap(int[] heap, int a, int b) {
+		int temp = heap[a];
+		heap[a] = heap[b];
+		heap[b] = temp;
+	}
+}
