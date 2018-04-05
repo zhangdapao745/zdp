@@ -8,7 +8,7 @@ Given [1,1,1,2,2,3] and k = 2, return [1,2].
 思路：
 扫描一边数组，将值和次数保存到map中，
 用优先队列PriorityQueue将entry保存起来，Comparator根据entry的值（次数），比较器使用逆序
-默认从小到大，即使用大顶堆排序，
+默认从小到大，使用小顶堆，PriorityQueue只保证根是最小的，不保证堆是有序的!
 获取优先队列的前k个值即可。
 ps:treemap<次数,list<值>>也可，使用DescendingKeyIterator逆序遍历。
    桶排序保存也可以，因为次数最大也是小于数组长度，因此桶的个数不会很大。
