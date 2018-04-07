@@ -1,0 +1,58 @@
+小易总是感觉饥饿，所以作为章鱼的小易经常出去寻找贝壳吃。最开始小易在一个初始位置x_0。对于小易所处的当前位置x，他只能通过神秘的力量移动到 4 * x + 3或者8 * x + 7。因为使用神秘力量要耗费太多体力，所以它只能使用神秘力量最多100,000次。贝壳总生长在能被1,000,000,007整除的位置(比如：位置0，位置1,000,000,007，位置2,000,000,014等)。小易需要你帮忙计算最少需要使用多少次神秘力量就能吃到贝壳。
+
+输入一个初始位置x_0,范围在1到1,000,000,006
+
+用map记录到位置n的步数，并去重，用队列进行bfs遍历。
+
+solution:
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		while(scanner.hasNextLong()){
+			long n = scanner.nextLong();
+			System.out.println(bfs(n));
+		}
+	}
+	
+	public static long bfs(long n) {
+		Map<Long, Integer> map = new HashMap<>();
+		Queue<Long> queue = new LinkedList<>();
+		queue.offer(n);
+		map.put(n, 0);
+		while (!queue.isEmpty()) {
+			long d = queue.poll();
+			if(map.get(d) > 100000)
+			{
+				return -1l;
+			}
+			if(d == 0l){
+				return map.get(d);
+			}else {
+				long p = (d * 4 + 3)%1000000007L;
+				if(p == 0l){
+					return map.get(d)+1;
+				}
+				if(!map.containsKey(p)){
+					queue.add(p);
+					map.put(p, map.get(d)+1);
+				}
+				p = (d * 8 + 7)%1000000007L;
+				if(p == 0l){
+					return map.get(d)+1;
+				}
+				if(!map.containsKey(p)){
+					queue.add(p);
+					map.put(p, map.get(d)+1);
+				}
+			}
+		}
+		return -1l;
+	}
+}
