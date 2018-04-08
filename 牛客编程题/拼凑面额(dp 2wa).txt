@@ -1,0 +1,34 @@
+给你六种面额1、5、10、20、50、100元的纸币，假设每种币值的数量都足够多，编写程序求组成N员（N为0-10000的非负整数）的不同组合的个数。
+
+思路：
+dp[i] = dp[i-1] + dp[i-5] + dp[i-10] + dp[i-20] + dp[i-50] + dp[i-100]
+上述公式会重复计算！！
+【状态转移方程】:
+A(n,m) = A(n-m,m) + A(n,m-) (n>=m, m-为小于m的面值)
+A(n,m) = A(n,m-) (n<m)
+
+solution:
+import java.util.Scanner;
+ 
+public class Main {
+ 
+    public static void main(String[] args) {
+        long[] dp;
+        int[] r = {1,5,10,20,50,100};
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
+            int n = scanner.nextInt();
+            dp = new long[n+1];
+            dp[0] = 1;
+            //外循环为面值 内循环为金额。 反过来会重复计算。
+            for(int j = 0;j<r.length;j++){
+                for(int i = 1;i<=n;i++){
+                    if(i>=r[j]){
+                        dp[i] += dp[i-r[j]];
+                    }
+                }
+            }
+            System.out.println(dp[n]);
+        }
+    }
+}

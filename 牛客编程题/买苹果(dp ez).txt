@@ -1,0 +1,30 @@
+小易去附近的商店买苹果，奸诈的商贩使用了捆绑交易，只提供6个每袋和8个每袋的包装(包装不可拆分)。 可是小易现在只想购买恰好n个苹果，小易想购买尽量少的袋数方便携带。如果不能购买恰好n个苹果，小易将不会购买。
+
+
+solution:
+import java.util.Scanner;
+ 
+public class Main {
+ 
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int[] dp;
+        int[] apple = {6,8};
+        while(scanner.hasNext()){
+            int n = scanner.nextInt();
+            dp = new int[n+1];
+            dp[0] = 0;
+            for(int j = 1;j<n+1;j++){
+                dp[j] = 999;
+            }
+            for(int j = 0;j<apple.length;j++){
+                for(int i = 1;i<n+1;i++){
+                    if(i>=apple[j] && dp[i-apple[j]]!=999){
+                        dp[i] = Math.min(dp[i-apple[j]]+1, dp[i]);
+                    }
+                }
+            }
+            System.out.println(dp[n]==999?-1:dp[n]);
+        }
+    }
+}
