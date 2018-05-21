@@ -1,0 +1,179 @@
+//[编程题]Anniversary(未完成)
+	static int max = 0;
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int limit = sc.nextInt();
+			int n = sc.nextInt();
+			LinkedList<Integer[]> road = new LinkedList<>();
+			for(int i = 0;i<n-1;i++){
+				int u = sc.nextInt();
+				int v = sc.nextInt();
+				int d = sc.nextInt();
+				
+			}
+		}
+	}
+
+[编程题] 小熊吃糖
+有n只小熊，他们有着各不相同的战斗力。每次他们吃糖时，会按照战斗力来排，战斗力高的小熊拥有优先选择权。前面的小熊吃饱了，后面的小熊才能吃。每只小熊有一个饥饿值，每次进食的时候，小熊们会选择最大的能填饱自己当前饥饿值的那颗糖来吃，可能吃完没饱会重复上述过程，但不会选择吃撑。
+现在给出n只小熊的战斗力和饥饿值，并且给出m颗糖能填饱的饥饿值。
+求所有小熊进食完之后，每只小熊剩余的饥饿值。
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			int m = sc.nextInt();
+			List<Integer> candy = new LinkedList<>();
+			for(int i = 0;i<m;i++){
+				candy.add(sc.nextInt());
+			}
+			candy.sort((Integer i1,Integer i2)->i2-i1);
+			int[][] bear = new int[n][2];
+			for(int i = 0;i<n;i++){
+				bear[i][0] = sc.nextInt();
+				bear[i][1] = sc.nextInt();
+			}
+			for(int i = 0;i<n&&!candy.isEmpty();i++){
+				int id = find(bear);
+				bear[id][1] = eat(bear[id][1], candy);
+			}
+			
+			for(int i =0;i<n;i++){
+				System.out.println(bear[i][1]);
+			}
+		}
+	}
+	static int eat(int hungry,List<Integer> candy){
+		if(!candy.isEmpty()){
+			Iterator<Integer> it = candy.iterator();
+			while(it.hasNext()){
+				int c = it.next();
+				if(hungry >= c){
+					it.remove();
+					hungry-=c;
+				}
+			}
+		}
+		return hungry;
+	}
+
+	static int find(int[][] bear){
+		int res = -1;
+		int max = -1;
+		for(int i = 0;i<bear.length;i++){
+			if(bear[i][0] > max){
+				res = i;
+				max = bear[i][0];
+			}
+		}
+		bear[res][0] = 0;
+		return res;
+	}
+
+[编程题] 最大乘积
+给定一个无序数组，包含正数、负数和0，要求从中找出3个数的乘积，使得乘积最大，要求时间复杂度：O(n)，空间复杂度：O(1)
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			long max1 = Long.MIN_VALUE;
+			long max2 = Long.MIN_VALUE;
+			long max3 = Long.MIN_VALUE;
+			long min1 = Long.MAX_VALUE;
+			long min2 = Long.MIN_VALUE;
+			for(int i = 0;i<n;i++){
+				long num = sc.nextLong();
+				if(num>max1){
+					max3 = max2;
+					max2 = max1;
+					max1 = num;
+				}else if(num > max2){
+					max3 = max2;
+					max2 = num;
+				}else if(num > max3){
+					max3 = num;
+				}
+				if(num < min1){
+					min2 = min1;
+					min1 = num;
+				}else if(num < min2){
+					min2 = num;
+				}
+			}
+			System.out.println(Math.max(max1*max2*max3, min1*min2*max1));
+		}
+	}
+	
+[编程题] 数三角形
+给出平面上的n个点，现在需要你求出，在这n个点里选3个点能构成一个三角形的方案有几种。	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			int[][] point = new int[n][2];
+			for(int i =0;i<n;i++){
+				point[i][0] = sc.nextInt();
+				point[i][1] = sc.nextInt();
+			}
+			int count = 0;
+			for(int i = 0;i<n;i++){
+				for(int j = 0;j<i;j++){
+					for(int k = 0;k<j;k++){
+						if(cul(point[i][0], point[i][1], point[j][0], point[j][1], point[k][0], point[k][1])){
+							count++;
+						}
+					}
+				}
+			}
+			System.out.println(count);
+		}
+	}
+	static boolean cul(int x1,int y1,int x2,int y2,int x3,int y3){
+		return (y3-y1)*(x1-x2) != (x3-x1)*(y1-y2);
+	}
+	
+[编程题]列表补全
+在商城的某个位置有一个商品列表，该列表是由L1、L2两个子列表拼接而成。当用户浏览并翻页时，需要从列表L1、L2中获取商品进行展示。展示规则如下：
+1. 用户可以进行多次翻页，用offset表示用户在之前页面已经浏览的商品数量，比如offset为4，表示用户已经看了4个商品
+2. n表示当前页面需要展示的商品数量
+3. 展示商品时首先使用列表L1，如果列表L1长度不够，再从列表L2中选取商品
+4. 从列表L2中补全商品时，也可能存在数量不足的情况
+请根据上述规则，计算列表L1和L2中哪些商品在当前页面被展示了
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int offset = sc.nextInt();//已经看过的个数
+			int n = sc.nextInt();//需要n个
+			int l1 = sc.nextInt();
+			int l2 = sc.nextInt();
+			
+			int start1, stop1, start2, stop2;
+			if(offset < l1){
+				start1 = offset;
+				if(offset + n<l1){
+					stop1 = offset + n;
+					start2 = 0;
+					stop2 = 0;
+				}else {
+					stop1 = l1;
+					start2 = 0;
+					int need = offset+n-l1;
+					stop2 = need>l2?l2:need;
+				}
+			}else if (offset < l1+l2) {
+				start1 = l1;
+				stop1 = l1;
+				start2 = offset - l1;
+				int need = offset+n-l1;
+				stop2 = need>l2?l2:need;
+			}else {
+				start1 = l1;
+				stop1 = l1;
+				start2 = l2;
+				stop2 = l2;
+			}
+			System.out.println(start1 + " " + stop1 + " " + start2 + " " + stop2);
+		}
+	}
