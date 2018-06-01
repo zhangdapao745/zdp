@@ -1,0 +1,46 @@
+dfs扫描二维数组并用另开的二维数组记录每个元素的最大值，如果邻居有记录那就不用再次扫描
+
+static int[][] dir = new int[][] { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+public int longestIncreasingPath(int[][] matrix) {
+	int r = matrix.length;
+	if(r == 0){
+		return 0;
+	}
+	int l = matrix[0].length;
+	int[][] record = new int[r][l];
+	for (int i = 0; i < r; i++) {
+		for (int j = 0; j < l; j++) {
+			record[i][j] = -1;
+		}
+	}
+	for (int i = 0; i < r; i++) {
+		for (int j = 0; j < l; j++) {
+			find(matrix,record,i,j,r,l);
+		}
+	}
+	
+	int max = 0;
+	for (int i = 0; i < r; i++) {
+		for (int j = 0; j < l; j++) {
+			max = Math.max(max, record[i][j]);
+		}
+	}
+	return max;
+}
+public void find(int[][] matrix, int[][] record,int i,int j,int r,int l){
+	int nexti,nextj;
+	int max = 1;
+	for (int d = 0; d < dir.length; d++) {
+		nexti = i + dir[d][0];
+		nextj = j + dir[d][1];
+		if (nexti >= 0 && nexti < r && nextj >= 0 && nextj < l) {
+			if(matrix[i][j] < matrix[nexti][nextj]){
+				if(record[nexti][nextj] == -1){
+					find(matrix, record, nexti, nextj, r, l);
+				}
+				max = Math.max(max, record[nexti][nextj]+1);
+			}
+		}
+	}
+	record[i][j] = max;
+}

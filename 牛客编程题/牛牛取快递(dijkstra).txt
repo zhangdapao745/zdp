@@ -1,0 +1,40 @@
+https://www.nowcoder.com/questionTerminal/071695ed1d0b4e65b07eb969d212b92a
+
+static LinkedList<Integer[]>[] road;
+static int dijkstra(int s, int t) {
+    // 堆优化
+    int n = road.length;
+    int[] visited = new int[n];
+    int[] dis = new int[n];
+    int to, d;
+    Integer[] toDis;
+    PriorityQueue<Integer[]> queue = new PriorityQueue<>((Integer[] o1,Integer[] o2)->o1[1]-o2[1]);
+    for (int i = 1; i < n; i++) {
+        dis[i] = Integer.MAX_VALUE / 2;
+        visited[i] = 0;
+    }
+    dis[s] = 0;// 到自己的距离为0
+    int newdis;
+    queue.offer(new Integer[] { s, 0 });
+    while (!queue.isEmpty()) {
+        toDis = queue.element();
+        queue.poll();
+        to = toDis[0];
+        d = toDis[1];
+        if (visited[to] == 1) {
+            continue;
+        }
+        visited[to] = 1;
+        for (int i = 1; i < n; i++) {
+            newdis = dis[to] + find(to, i);
+            if (visited[i] == 0 && dis[i] > newdis) {// i没去过，并且dis[to]+find(to,i)直接到i的距离大于到to再到i的距离
+                dis[i] = newdis;
+                queue.offer(new Integer[] { i, newdis });
+            }
+        }
+        if (visited[t] == 1) {
+            return dis[t];
+        }
+    }
+    return dis[t];
+}
